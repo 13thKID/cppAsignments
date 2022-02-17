@@ -1,0 +1,21 @@
+#!/bin/bash
+
+FILE=$1
+INPUT=$2
+
+if [ -z "$FILE" ]
+then
+    FILE="main"
+    # FILE="typenames"
+    # FILE="sstream"
+    # FILE="test_vector"
+    # FILE="string_split"
+fi
+
+g++-11 ./$FILE.cpp -o $FILE;
+
+if test -f "$INPUT.in"; then
+    ./$FILE < $INPUT.in
+else
+    ./$FILE
+fi

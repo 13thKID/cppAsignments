@@ -1,0 +1,9 @@
+/* MathML */
+math[display="block"] {
+    border: 1px solid #b32fb3; 
+    background: #ecd6f4; 
+    color: black; 
+    margin: 10px; 
+    padding: 8px; 
+} 
+
