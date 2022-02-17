@@ -6,19 +6,19 @@ void sep()
   std::cout << "-----------------------------------------------------------" << std::endl;
 }
 
-std::vector<std::vector<int>::iterator> nth_year_courses_iterators(std::vector<int> codes, int year)
+std::vector<int> nth_year_courses_indices(std::vector<int> codes, int year)
 {
-  std::vector<std::vector<int>::iterator> iterators;
-  for (std::vector<int>::iterator it = codes.begin(); it != codes.end(); ++it)
+  std::vector<int> indices;
+  // for (std::vector<int>::iterator it = codes.begin(); it != codes.end(); ++it)
+  for (std::vector<int>::size_type i = 0; i != codes.size(); i++)
   {
-    if ((*it / 10000) == year)
+    if ((codes[i] / 10000) == year)
     {
-      iterators.push_back(it);
-      std::cout << *it << std::endl;
+      indices.push_back(i);
     }
   }
 
-  return iterators;
+  return indices;
 }
 
 inline bool file_exists(const std::string &name)

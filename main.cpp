@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -52,61 +53,64 @@ int main()
 
   input_file.open(file_name);
 
-  if (input_file.is_open())
+  if (!input_file.is_open())
   {
-    // variables
-    std::string line = "";
-    std::stringstream line_ss;
-    int line_number{0};
-    std::vector<std::string> course_names;
-    std::vector<float> course_marks;
-    std::vector<int> course_codes;
-    // Regexp for testing the line format: ##.# \s ##### \s \s \s <name-of-the-course>
-    std::regex str_expr("^[1-9]+[0-9]+\\.[0-9]+\\s[0-9]{5}\\s+[A-Z]+.*$");
+    std::cout << "File is not opened from unknown reasons. Try again" << std::endl;
+    return 0;
+  }
 
-    std::cout << "File was opened correctly!" << std::endl;
-    sep();
+  // variables
+  std::string line = "";
+  std::stringstream line_ss;
+  int line_number{0};
+  std::vector<std::string> course_names;
+  std::vector<float> course_marks;
+  std::vector<int> course_codes;
+  // Regexp for testing the line format: ##.# \s ##### \s \s \s <name-of-the-course>
+  std::regex str_expr("^[1-9]+[0-9]+\\.[0-9]+\\s[0-9]{5}\\s+[A-Z]+.*$");
 
-    // temporary variables
-    int *code = new int;
-    float *mark = new float;
-    std::string *name = new std::string;
+  std::cout << "File was opened correctly!" << std::endl;
+  sep();
 
-    while (getline(input_file, line, '\n'))
+  // temporary variables
+  int *code = new int;
+  float *mark = new float;
+  std::string *name = new std::string;
+
+  while (getline(input_file, line, '\n'))
+  {
+    line_number++;
+    line_ss = std::stringstream(line);
+    if (std::regex_match(line, str_expr) == 0)
     {
-      line_number++;
-      line_ss = std::stringstream(line);
-      if (std::regex_match(line, str_expr) == 0)
-      {
-        std::cout << "The format of the line:  " << line_number << "  is not valid.\n"
-                  << "Check the file and restart the program." << std::endl;
-        return 0;
-      }
-
-      line_ss >> *mark >> *code;
-      getline(line_ss, *name);
-
-      course_marks.push_back(*mark);
-      course_codes.push_back(*code);
-      course_names.push_back(*name);
+      std::cout << "The format of the line:  " << line_number << "  is not valid.\n"
+                << "Check the file and restart the program." << std::endl;
+      return 0;
     }
-    delete mark;
-    delete code;
-    delete name;
 
-    std::cout << "Your file contains " << line_number << " lines."
-              << "\n\n";
+    line_ss >> *mark >> *code;
+    getline(line_ss, *name);
 
-    print_vector(course_names);
-  };
+    course_marks.push_back(*mark);
+    course_codes.push_back(*code);
+    course_names.push_back(*name);
+  }
+  delete mark;
+  delete code;
+  delete name;
+
+  std::cout << "Your file contains " << line_number << " lines."
+            << "\n\n";
 
   /** -------------------------------------------------------------------------------
    * Operations on the data
    * */
 
-  char mode;
+  int mode;
+  int total_courses;
+  std::vector<int> selected_courses_indices;
 
-  std::cout << "Which courses should be included in the calculations. Choose:"
+  std::cout << "Which courses should be included in the calculations"
             << "\n"
             << "(0) - all courses"
             << "\n"
@@ -114,11 +118,38 @@ int main()
             << "\n"
             << "(2) - second year courses"
             << "\n"
-            << "(3) - third year courses" << std::endl;
+            << "(3) - third year courses"
+            << "\nChoose: ";
 
   std::cin >> mode;
-  // if()
-  // nth_year_courses_iterators(course_codes, mode);
+
+  if (mode == 0)
+  {
+    for (int i = 0; i != course_codes.size(); i++)
+      selected_courses_indices.push_back(i);
+  }
+  else if (mode <= 3)
+  {
+    selected_courses_indices = nth_year_courses_indices(course_codes, mode);
+  }
+  else
+  {
+    std::cout << "Wrong code! Try again!";
+    return 0;
+  }
+
+  // Assigning total number of the courses found
+  total_courses = selected_courses_indices.size();
+
+  // Printing out the selected courses
+  sep();
+  std::cout << "Total courses: " << total_courses << "\n\n";
+  for (auto i : selected_courses_indices)
+  {
+    std::cout << std::fixed << std::setprecision(1) << course_marks[i] << "\t"
+              << course_codes[i] << "\t"
+              << course_names[i] << std::endl;
+  }
 
   return 0;
 }
