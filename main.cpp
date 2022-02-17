@@ -162,6 +162,14 @@ int main()
               << course_codes[i] << "\t"
               << course_names[i] << std::endl;
   }
+  sep();
+
+  float mean = get_mean(course_marks);
+
+  std::cout << std::fixed << std::setprecision(4);
+  std::cout << "Mean of the courses selected is: " << mean << std::endl;
+  std::cout << "Standard deviation is: " << get_std_dev(course_marks)[0] << std::endl;
+  std::cout << "Standard error in the mean is: " << get_std_dev(course_marks)[1] << std::endl;
 
   return 0;
 }

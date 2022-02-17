@@ -1,5 +1,6 @@
 #include <vector>
 #include <math.h>
+#include <numeric>
 #include <sys/stat.h>
 
 void sep()
@@ -61,6 +62,30 @@ int get_integer()
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
   return (int)input;
+}
+
+float get_mean(std::vector<float> data)
+{
+  float sum_of_elems = std::accumulate(data.begin(), data.end(), 0);
+  return sum_of_elems / data.size();
+}
+
+float *get_std_dev(std::vector<float> data)
+{
+  float val{0};
+  float mean = get_mean(data);
+  float std_dev, err_in_mean;
+  float *results = new float[2];
+
+  for (auto &elem : data)
+  {
+    val += pow((elem - mean), 2);
+  }
+
+  results[0] = sqrt(val / (data.size() - 1));
+  results[1] = results[0] / sqrt(data.size());
+
+  return results;
 }
 
 /** -------------------------------------------------------------------------------
