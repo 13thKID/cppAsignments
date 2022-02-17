@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <limits>
 #include <string>
 #include <sstream>
 #include <regex>
@@ -9,12 +10,14 @@
 // Custom headers
 #include "functions.h"
 
+#define DEFAULT_FILE_NAME "courselist.dat";
+
 int main()
 {
   std::string input = "";
 
   std::fstream input_file;
-  std::string file_name = "courselist.dat";
+  std::string file_name = DEFAULT_FILE_NAME;
 
   /** -------------------------------------------------------------------------------
    * Getting the file name
@@ -40,7 +43,11 @@ int main()
 
     if (!file_exists(file_name))
     {
-      std::cout << "File with a given name does not exists" << std::endl;
+      std::cout << "File with a given name does not exists. Press ENTER to try again" << std::endl;
+      // Must be resetted to enable continuing with a default file name
+      std::getchar(); // Wait for the user to press
+      input = "";
+      file_name = DEFAULT_FILE_NAME;
       continue;
     }
 
