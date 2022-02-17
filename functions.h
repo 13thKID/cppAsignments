@@ -1,4 +1,5 @@
 #include <vector>
+#include <math.h>
 #include <sys/stat.h>
 
 void sep()
@@ -41,6 +42,25 @@ std::vector<std::string> str_split(std::string str, std::string delim = " ")
   pieces.push_back(str);
 
   return pieces;
+}
+
+int get_integer()
+{
+  double input;
+
+  std::cin >> input;
+
+  if (std::cin.fail() || input - std::floor(input))
+  {
+    std::cout << "Provided input was incorrect. Try again. The input must be an integer.";
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return false;
+  }
+
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+  return (int)input;
 }
 
 /** -------------------------------------------------------------------------------

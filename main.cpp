@@ -119,30 +119,35 @@ int main()
 
   std::cout << "Which courses should be included in the calculations"
             << "\n"
-            << "(0) - all courses"
-            << "\n"
             << "(1) - first year courses"
             << "\n"
             << "(2) - second year courses"
             << "\n"
             << "(3) - third year courses"
-            << "\nChoose: ";
+            << "\n"
+            << "(4) - all courses";
+  while (true)
+  {
+    std::cout << "\nChoose: ";
 
-  std::cin >> mode;
+    if (!(mode = get_integer()))
+      continue;
 
-  if (mode == 0)
-  {
-    for (int i = 0; i != course_codes.size(); i++)
-      selected_courses_indices.push_back(i);
-  }
-  else if (mode <= 3)
-  {
-    selected_courses_indices = nth_year_courses_indices(course_codes, mode);
-  }
-  else
-  {
-    std::cout << "Wrong code! Try again!";
-    return 0;
+    if (mode <= 3)
+    {
+      selected_courses_indices = nth_year_courses_indices(course_codes, mode);
+    }
+    else if (mode == 4)
+    {
+      for (int i = 0; i != course_codes.size(); i++)
+        selected_courses_indices.push_back(i);
+    }
+    else
+    {
+      std::cout << "There are no courses for " << mode << " year. Try again!";
+      continue;
+    }
+    break;
   }
 
   // Assigning total number of the courses found
