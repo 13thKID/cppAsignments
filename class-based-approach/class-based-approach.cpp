@@ -22,11 +22,12 @@ int main()
   std::getline(std::cin, file_name, '\n');
 
   my_db->read_db_file(file_name);
-  std::cout << my_db->table_length << std::endl;
-  std::cout << my_db->table[0].name << std::endl;
 
   my_db->pick_year(1);
-  my_db->print_last_query();
+  my_db->show_query();
+  my_db->sort("marks", false);
+  sep();
+  my_db->show_table();
 
   return 0;
 }

@@ -6,6 +6,7 @@
 #include <sstream>
 #include <regex>
 #include <vector>
+#include <algorithm>
 
 // #include "functions.h"
 
@@ -16,18 +17,17 @@ private:
   std::string filename_regex = "^[1-9]+[0-9]+\\.[0-9]+\\s[0-9]{5}\\s[A-Z]+.*$";
 
 public:
-  struct Record
+  struct Course
   {
     float mark;
     int code;
     std::string name;
   };
 
+  std::vector<Course> courses;
+  std::vector<Course> courses_query;
   std::string file_name = "";
-  std::vector<Record> table;
   int table_length = {0};
-  // last query
-  std::vector<Record> last_query;
 
   bool verify_file(std::string file_name = "")
   {
@@ -88,32 +88,32 @@ public:
         return 0;
       }
       // Define, fill and push the record to the table
-      Record record;
+      Course record;
       line_ss >> record.mark >> record.code;
       line_ss.ignore(1); // Necessary to avoid space before the course name
       getline(line_ss, record.name);
-      this->table.push_back(record);
+      this->courses.push_back(record);
     }
 
     return true;
   }
 
-  std::vector<Record> pick_year(int year)
+  std::vector<Course> pick_year(int year)
   {
-    for (Record &record : this->table)
+    for (Course &record : this->courses)
     {
       if ((record.code / 10000) == year)
       {
-        this->last_query.push_back(record);
+        this->courses_query.push_back(record);
       }
     }
 
-    return this->last_query;
+    return this->courses_query;
   }
 
-  void print_table()
+  void show_table()
   {
-    for (Record &record : this->table)
+    for (Course &record : this->courses)
     {
       std::cout << std::fixed << std::setprecision(2) << record.mark << "\t"
                 << record.code << "\t"
@@ -121,17 +121,48 @@ public:
     }
   }
 
-  void print_last_query()
+  void show_query()
   {
-    for (Record &record : this->last_query)
+    for (Course &record : this->courses_query)
     {
       std::cout << std::fixed << std::setprecision(2) << record.mark << "\t"
                 << record.code << "\t"
                 << record.name << std::endl;
     }
   }
-  int last_query_length()
+
+  int query_length()
   {
-    return this->last_query.size();
+    return this->courses_query.size();
+  }
+  // Sorting
+  struct
+  {
+    bool operator()(Course lhs, Course rhs) const { return lhs.code < rhs.code; }
+  } by_codes;
+
+  struct
+  {
+    bool operator()(Course lhs, Course rhs) const { return lhs.mark < rhs.mark; }
+  } by_marks;
+
+  void sort(std::string by = "marks", bool sort_query = true)
+  {
+    std::vector<Course> *table = &this->courses;
+    if (sort_query)
+      table = &this->courses_query;
+
+    if (by == "codes")
+    {
+      std::sort((*table).begin(), (*table).end(), by_codes);
+    }
+    else if (by == "marks")
+    {
+      std::sort((*table).begin(), (*table).end(), by_marks);
+    }
+    else
+    {
+      std::cout << "Unknown column name!" << std::endl;
+    }
   }
 };

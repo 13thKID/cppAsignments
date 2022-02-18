@@ -2,6 +2,11 @@
 #include <fstream>
 #include <sys/stat.h>
 
+void sep()
+{
+  std::cout << "-----------------------------------------------------------" << std::endl;
+}
+
 inline bool file_exists(const std::string &name)
 {
   struct stat buffer;
