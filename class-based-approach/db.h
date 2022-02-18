@@ -19,13 +19,15 @@ public:
   struct Record
   {
     float mark;
-    double code;
+    int code;
     std::string name;
   };
 
   std::string file_name = "";
-  int line_number = {0};
   std::vector<Record> table;
+  int table_length = {0};
+  // last query
+  std::vector<Record> last_query;
 
   bool verify_file(std::string file_name = "")
   {
@@ -77,11 +79,11 @@ public:
 
     while (getline(input_file, line, '\n'))
     {
-      this->line_number++;
+      this->table_length++;
       line_ss = std::stringstream(line);
       if (regex_match(line, std::regex(this->filename_regex)) == 0)
       {
-        std::cout << "The format of the line:  " << line_number << "  is not valid.\n"
+        std::cout << "The format of the line:  " << table_length << "  is not valid.\n"
                   << "Check the file and restart the program." << std::endl;
         return 0;
       }
@@ -96,8 +98,40 @@ public:
     return true;
   }
 
-  void status()
+  std::vector<Record> pick_year(int year)
   {
-    std::cout << "DB is ready to serve you" << std::endl;
+    for (Record &record : this->table)
+    {
+      if ((record.code / 10000) == year)
+      {
+        this->last_query.push_back(record);
+      }
+    }
+
+    return this->last_query;
+  }
+
+  void print_table()
+  {
+    for (Record &record : this->table)
+    {
+      std::cout << std::fixed << std::setprecision(2) << record.mark << "\t"
+                << record.code << "\t"
+                << record.name << std::endl;
+    }
+  }
+
+  void print_last_query()
+  {
+    for (Record &record : this->last_query)
+    {
+      std::cout << std::fixed << std::setprecision(2) << record.mark << "\t"
+                << record.code << "\t"
+                << record.name << std::endl;
+    }
+  }
+  int last_query_length()
+  {
+    return this->last_query.size();
   }
 };
