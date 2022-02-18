@@ -10,7 +10,8 @@
 // Custom headers
 #include "functions.h"
 
-#define DEFAULT_FILE_NAME "courselist.dat";
+// Constants
+const std::string DEFAULT_FILE_NAME = "courselist.dat";
 
 int main()
 {
