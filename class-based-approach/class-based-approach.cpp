@@ -23,7 +23,7 @@ int main()
 
   my_db->read_db_file(file_name);
 
-  my_db->pick_year(1);
+  my_db->pick_year(2);
   my_db->sort("marks");
   sep();
   my_db->show_query();
@@ -33,5 +33,8 @@ int main()
 
   std::cout << std_dev[0] << std::endl;
   std::cout << std_dev[1] << std::endl;
+
+  my_db->add_record();
+  my_db->show_table();
   return 0;
 }

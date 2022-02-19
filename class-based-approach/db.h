@@ -148,6 +148,23 @@ public:
     return sum / this->query_length();
   }
 
+  void add_record()
+  {
+    Course new_course;
+
+    std::cout << "Enter the name of the course: ";
+    getline(std::cin, new_course.name);
+
+    std::cout << "Enter the code of the course: ";
+    std::cin >> new_course.code;
+
+    std::cout << "Enter the mark of the course: ";
+    std::cin >> new_course.mark;
+
+    this->courses.push_back(new_course);
+    this->table_length++;
+  }
+
   float *std_dev()
   {
     double *sum = new double{0};
