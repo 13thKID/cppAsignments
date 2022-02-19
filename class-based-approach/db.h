@@ -6,7 +6,9 @@
 #include <sstream>
 #include <regex>
 #include <vector>
-#include <algorithm>
+#include <algorithm> // std::sort
+#include <numeric>   // std::accumulate
+#include <math.h>    // pow
 
 // #include "functions.h"
 
@@ -134,6 +136,36 @@ public:
   int query_length()
   {
     return this->courses_query.size();
+  }
+
+  float mean()
+  {
+    double sum{0};
+    for (Course &course : this->courses_query)
+    {
+      sum += course.mark;
+    }
+    return sum / this->query_length();
+  }
+
+  float *std_dev()
+  {
+    double *sum = new double{0};
+    float *mean = new float{this->mean()};
+    float *results = new float[2];
+
+    for (Course &course : this->courses_query)
+    {
+      *sum += pow((course.mark - *mean), 2);
+    }
+
+    results[0] = sqrt(*sum / (this->query_length() - 1));
+    results[1] = results[0] / sqrt(this->query_length());
+
+    delete mean;
+    delete sum;
+
+    return results;
   }
   // Sorting
   struct

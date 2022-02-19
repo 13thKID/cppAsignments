@@ -24,10 +24,14 @@ int main()
   my_db->read_db_file(file_name);
 
   my_db->pick_year(1);
-  my_db->show_query();
-  my_db->sort("marks", false);
+  my_db->sort("marks");
   sep();
-  my_db->show_table();
+  my_db->show_query();
+  std::cout << my_db->mean() << std::endl;
 
+  float *std_dev = my_db->std_dev();
+
+  std::cout << std_dev[0] << std::endl;
+  std::cout << std_dev[1] << std::endl;
   return 0;
 }
