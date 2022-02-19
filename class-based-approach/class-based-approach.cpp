@@ -48,6 +48,8 @@ int main()
                 << "\n"
                 << "(a) - add record to the table"
                 << "\n"
+                << "(e) - export query to the file"
+                << "\n"
                 << "(D) - open another database"
                 << "\n"
                 << "(!) - quit"
@@ -177,6 +179,13 @@ int main()
       {
         sep();
         my_db->add_course();
+
+        continue;
+      }
+      case 'e':
+      {
+        sep();
+        my_db->save_query();
 
         continue;
       }

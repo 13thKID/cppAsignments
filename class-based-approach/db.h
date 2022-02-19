@@ -287,4 +287,42 @@ public:
       std::cout << "Unknown column name!" << std::endl;
     }
   }
+
+  void save_query()
+  {
+    std::ofstream output_file;
+    std::string file_name;
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    while (true)
+    {
+      std::cout << "Provide the name of the file or press ENTER continue to proceed with a default name: ";
+      getline(std::cin, file_name);
+      if (file_name != "")
+      {
+        if (!regex_match(file_name, std::regex("^[\\w\\-. ]+$")))
+        {
+          std::cout << "This file name is not valid. Press ENTER to try again";
+          getchar();
+          continue;
+        }
+      }
+      else
+      {
+        file_name = "query.dat";
+      }
+      break;
+    }
+
+    output_file.open(file_name);
+
+    for (Course &course : this->courses_query)
+    {
+      output_file << std::fixed << std::setprecision(1)
+                  << course.mark << " "
+                  << course.code << " "
+                  << course.name << "\n";
+    }
+    output_file.close();
+  }
 };
