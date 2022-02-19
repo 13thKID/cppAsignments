@@ -10,8 +10,6 @@
 #include <numeric>   // std::accumulate
 #include <math.h>    // pow
 
-// #include "functions.h"
-
 class DB
 {
 private:
@@ -34,29 +32,35 @@ public:
   bool verify_file(std::string file_name = "")
   {
     // No filename give
-    if (file_name == "" && !file_exists(default_file_name))
+    if (file_name == "")
     {
-      std::cout << "There is no file \"" << default_file_name << "\" in current directory"
-                << "Press ENTER and try again";
-      getchar();
-      return false;
+      if (!file_exists(this->default_file_name))
+      {
+        std::cout << "There is no file \"" << default_file_name << "\" in current directory"
+                  << "Press ENTER and try again";
+        getchar();
+        return false;
+      }
+      else
+      {
+        this->file_name = this->default_file_name;
+        return true;
+      }
     }
     else
     {
-      this->file_name = this->default_file_name;
-      return true;
-    }
-    if (file_name != "" && !file_exists(file_name)) // Filename given
-    {
-      std::cout << "There is no file \"" << file_name << "\" in current directory"
-                << "Press ENTER and try again";
-      getchar();
-      return false;
-    }
-    else
-    {
-      this->file_name = file_name;
-      return true;
+      if (!file_exists(file_name))
+      {
+        std::cout << "There is no file \"" << file_name << "\" in current directory"
+                  << "Press ENTER and try again";
+        getchar();
+        return false;
+      }
+      else
+      {
+        this->file_name = file_name;
+        return true;
+      }
     }
   }
 
@@ -96,6 +100,8 @@ public:
       getline(line_ss, record.name);
       this->courses.push_back(record);
     }
+
+    input_file.close();
 
     return true;
   }
@@ -195,11 +201,14 @@ public:
   {
     bool operator()(Course lhs, Course rhs) const { return lhs.code < rhs.code; }
   } by_codes;
-
   struct
   {
     bool operator()(Course lhs, Course rhs) const { return lhs.mark < rhs.mark; }
   } by_marks;
+  struct
+  {
+    bool operator()(Course lhs, Course rhs) const { return lhs.name < rhs.name; }
+  } by_names;
 
   void sort(std::string by = "marks", bool sort_query = true)
   {
@@ -214,6 +223,10 @@ public:
     else if (by == "marks")
     {
       std::sort((*table).begin(), (*table).end(), by_marks);
+    }
+    else if (by == "names")
+    {
+      std::sort((*table).begin(), (*table).end(), by_names);
     }
     else
     {
