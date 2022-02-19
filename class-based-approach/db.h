@@ -100,8 +100,10 @@ public:
     return true;
   }
 
-  std::vector<Course> pick_year(int year)
+  std::vector<Course> pick_year(int year, bool add_query = false)
   {
+    if (!add_query)
+      this->courses_query.clear();
     for (Course &record : this->courses)
     {
       if ((record.code / 10000) == year)
@@ -115,22 +117,26 @@ public:
 
   void show_table()
   {
+    std::cout << "TOTAL: " << this->table_length << std::endl;
     for (Course &record : this->courses)
     {
       std::cout << std::fixed << std::setprecision(2) << record.mark << "\t"
                 << record.code << "\t"
                 << record.name << std::endl;
     }
+    std::cout << "TOTAL: " << this->table_length << std::endl;
   }
 
   void show_query()
   {
+    std::cout << "TOTAL: " << this->query_length() << std::endl;
     for (Course &record : this->courses_query)
     {
       std::cout << std::fixed << std::setprecision(2) << record.mark << "\t"
                 << record.code << "\t"
                 << record.name << std::endl;
     }
+    std::cout << "TOTAL: " << this->query_length() << std::endl;
   }
 
   int query_length()
