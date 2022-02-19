@@ -46,6 +46,8 @@ int main()
                 << "\n"
                 << "(c) - sort the last query"
                 << "\n"
+                << "(a) - add record to the table"
+                << "\n"
                 << "(D) - open another database"
                 << "\n"
                 << "(!) - quit"
@@ -170,6 +172,14 @@ int main()
 
         continue;
       }
+
+      case 'a':
+      {
+        sep();
+        my_db->add_course();
+
+        continue;
+      }
       case 'D':
       {
         db_opened = false;
@@ -185,18 +195,5 @@ int main()
     }
   }
 
-  // my_db->pick_year(2);
-  // my_db->sort("marks");
-  // sep();
-  // my_db->show_query();
-  // std::cout << my_db->mean() << std::endl;
-
-  // float *std_dev = my_db->std_dev();
-
-  // std::cout << std_dev[0] << std::endl;
-  // std::cout << std_dev[1] << std::endl;
-
-  // my_db->add_record();
-  // my_db->show_table();
   return 0;
 }

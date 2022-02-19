@@ -87,7 +87,7 @@ public:
     {
       this->table_length++;
       line_ss = std::stringstream(line);
-      if (regex_match(line, std::regex(this->filename_regex)) == 0)
+      if (!regex_match(line, std::regex(this->filename_regex)))
       {
         std::cout << "The format of the line:  " << table_length << "  is not valid.\n"
                   << "Check the file and restart the program." << std::endl;
@@ -145,6 +145,13 @@ public:
     std::cout << "TOTAL: " << this->query_length() << std::endl;
   }
 
+  void show_course(Course course)
+  {
+    std::cout << std::fixed << std::setprecision(2) << course.mark << "\t"
+              << course.code << "\t"
+              << course.name << std::endl;
+  }
+
   int query_length()
   {
     return this->courses_query.size();
@@ -160,20 +167,67 @@ public:
     return sum / this->query_length();
   }
 
-  void add_record()
+  void add_course()
   {
     Course new_course;
 
-    std::cout << "Enter the name of the course: ";
-    getline(std::cin, new_course.name);
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    while (true)
+    {
+      std::cout << "Enter the name of the course: ";
+      getline(std::cin, new_course.name);
 
-    std::cout << "Enter the code of the course: ";
-    std::cin >> new_course.code;
+      if (!regex_match(new_course.name, std::regex("^[A-Z][a-zA-Z0-9\\s]{10,}$"))) // At least 10 characters
+      {
+        std::cout << "Entered name for the course is invalid. Press Enter and try again";
+        getchar();
+        continue;
+      }
+      break;
+    }
 
-    std::cout << "Enter the mark of the course: ";
-    std::cin >> new_course.mark;
+    while (true)
+    {
+      std::string *code = new std::string;
+      std::cout << "Enter the code of the course: ";
+      getline(std::cin, *code);
+
+      if (!regex_match(*code, std::regex("^[1-3][0-9]{4,}$")))
+      {
+        std::cout << "You've typed the wrong course code. Press Enter and try again";
+        getchar();
+        continue;
+      }
+      new_course.code = stoi(*code);
+      delete code;
+
+      break;
+    }
+
+    while (true)
+    {
+      std::string *mark = new std::string;
+      std::cout << "Enter the mark of the course: ";
+      getline(std::cin, *mark);
+
+      if (!regex_match(*mark, std::regex("^[1-9][0-9]\\.[0-9]$")))
+      {
+        std::cout << "You've typed the wrong course mark. Press Enter and try again";
+        getchar();
+        continue;
+      }
+      new_course.mark = stof(*mark);
+      delete mark;
+
+      break;
+    }
 
     this->courses.push_back(new_course);
+
+    sep();
+    std::cout << "You've added the following course:" << std::endl;
+    this->show_course(new_course);
+
     this->table_length++;
   }
 
